@@ -34,4 +34,4 @@ Flags:
 
 If any of these steps fails, a warning will be printed to `stderr`. If `-fail` is set, `fileenv` will immediately exit with status `1`. Otherwise `fileenv` will continue on.
 
-Once all environment variables are set, `fileenv` will execute the given program and arguments, passing through `stdin`, `stdout`, and `stderr`. If the program fails to start, or returns a non-zero exit status, the error will be logged to `stderr`.
+Once all environment variables are set, `fileenv` will execute the given program and arguments, passing through `stdin`, `stdout`, and `stderr`. If the program fails to start, or returns a non-zero exit status, the error will be logged to `stderr`. `fileenv` will return the same exit status as the child program.
