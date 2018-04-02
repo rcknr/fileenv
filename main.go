@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"syscall"
 )
 
 //usage prints fileenv usage
@@ -103,5 +104,11 @@ func main() {
 	err = cmd.Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: program terminated with error: %s\n", err)
+		// return child exit code
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			if ws, ok := exitErr.Sys().(syscall.WaitStatus); ok {
+				os.Exit(ws.ExitStatus())
+			}
+		}
 	}
 }
