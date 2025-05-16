@@ -1,21 +1,21 @@
 # About
 
-`fileenv` is a simple program to aid running [twelve-factor apps](https://12factor.net/config) in Docker (Swarm).
+`fileenv` helps you use Docker secrets easily.
 
 # TL;DR
 
-* You need `YOURENVVAR` to hold your Docker secret, `<secret-name>`
-* Set `YOURENVVAR_FILE=/run/secrets/<secret-name>`
-* Set your Dockerfile CMD as `/path/to/fileenv <your cmd> <your args...>`
+* You need `MY_SECRET` to hold your Docker secret, `<secret-name>`
+* Set `MY_SECRET_FILE=/run/secrets/<secret-name>`
+* Set your container command as `fileenv <your cmd> <your args...>`
 * Profit!
 
 # Why
 
-When using Docker Swarm, it's desirable to use [Docker secrets](https://docs.docker.com/engine/swarm/secrets/) to manage secrets [instead of passing secrets in environment variables](https://github.com/moby/moby/issues/13490).
+When using Docker Composer or Swarm, it's desirable to use [Docker secrets](https://docs.docker.com/engine/swarm/secrets/) to manage secrets [instead of passing secrets in environment variables](https://github.com/moby/moby/issues/13490).
 
-Many twelve-factor apps don't support reading from Docker secrets because they only read directly from environment variables.
+Many apps don't support reading from Docker secrets because they only read directly from environment variables.
 
-`fileenv` is a stop-gap solution to read Docker secrets (or any file) and set environment variables for your app, until you can update your app to read from Docker secrets.
+`fileenv` is a stop-gap solution to read Docker secrets (or any file) and set environment variables for your app.
 
 # Usage
 
@@ -35,3 +35,8 @@ Flags:
 If any of these steps fails, a warning will be printed to `stderr`. If `-fail` is set, `fileenv` will immediately exit with status `1`. Otherwise `fileenv` will continue on.
 
 Once all environment variables are set, `fileenv` will execute the given program and arguments, passing through `stdin`, `stdout`, and `stderr`. If the program fails to start, or returns a non-zero exit status, the error will be logged to `stderr`. `fileenv` will return the same exit status as the child program.
+
+You can include `fileenv` to your `Dockerfile` like this:
+```
+COPY --from=skauk/fileenv /usr/bin/fileenv /usr/bin/fileenv
+```
